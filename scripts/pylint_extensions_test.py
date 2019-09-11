@@ -955,11 +955,11 @@ class SingleSpaceAfterYieldTests(unittest.TestCase):
         self.checker_test_object.checker.process_module(
             yield_nothing_file)
 
-        # No errors on yield statements that do nothing.
+        # No errors on yield statements that yield nothing.
         with self.checker_test_object.assertNoMessages():
             temp_file.close()
 
-    def test_yield_in_multi_line_comment(self):
+    def test_yield_in_multi_line_string_or_comment(self):
         yield_in_multiline_file = astroid.scoped_nodes.Module(
             name='test',
             doc='Custom test')
@@ -991,7 +991,7 @@ class SingleSpaceAfterYieldTests(unittest.TestCase):
         self.checker_test_object.checker.process_module(
             yield_in_multiline_file)
 
-        # No errors on yield statements in multi-line comments.
+        # No errors on yield statements in multi-line strings/comments.
         with self.checker_test_object.assertNoMessages():
             temp_file.close()
 

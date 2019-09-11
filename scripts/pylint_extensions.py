@@ -929,27 +929,27 @@ class SingleSpaceAfterYieldChecker(checkers.BaseChecker):
             node: astroid.scoped_nodes.Function. Node to access module
                 content.
         """
-        in_multi_line_comment = False
+        in_multi_line_str = False
         multi_line_indicator = b'"""'
         file_content = read_from_node(node)
         for (line_num, line) in enumerate(file_content):
             bare_line = line.strip()
 
-            # Single multi-line comment, ignore it.
+            # Multi-line string/comment on one line, can ignore.
             if bare_line.count(multi_line_indicator) == 2:
                 continue
 
             # Flip multi-line boolean depending on whether or not we see
-            # the multi-line indicator. Possible for multiline comment to
+            # the multi-line indicator. Possible for multi-line comment to
             # be somewhere other than the start of a line (e.g. func arg),
             # so we can't look at start of or end of a line, which is why
             # the case where two indicators in a single line is handled
             # separately (i.e. one line comment with multi-line strings).
             if multi_line_indicator in bare_line:
-                in_multi_line_comment = not in_multi_line_comment
+                in_multi_line_str = not in_multi_line_str
 
-            # Ignore anything inside a multi-line comment.
-            if in_multi_line_comment:
+            # Ignore anything inside a multi-line string/comment.
+            if in_multi_line_str:
                 continue
 
             # Whitespace to right of yield keyword is important for regex.
